@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      OLLAMA_URL: http://host.docker.internal:11434
+      COMFYUI_URL: http://host.docker.internal:8188
+      STORAGE_ROOT: /app/storage/projects
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./storage:/app/storage
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build:
+      context: frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
